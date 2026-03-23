@@ -1,264 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OTC Review Tool | Dashboard Demo</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
-.step-inactive { opacity: 0.5; filter: grayscale(1); pointer-events: none; }
-.glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-@keyframes pulse-blue { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-.analyzing { animation: pulse-blue 2s infinite; }
-.modal-bg { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTC Review Tool | Dashboard Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .step-inactive { opacity: 0.5; filter: grayscale(1); pointer-events: none; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        @keyframes pulse-blue { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .analyzing { animation: pulse-blue 2s infinite; }
+        .modal-bg { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); }
+    </style>
 </head>
 <body class="bg-slate-50 min-h-screen font-sans text-slate-900">
 
-<div id="sampleModal" class="hidden fixed inset-0 z-50 modal-bg flex items-center justify-center p-4">
-<div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
-<div class="p-6 border-b border-slate-100 flex justify-between items-center">
-<h3 class="font-bold text-slate-800">Select Sample Document</h3>
-<button onclick="toggleModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
-</div>
-<div class="p-4 space-y-3">
-<button onclick="useSample('Goldman_Sachs_ISDA_2026.pdf')" class="w-full text-left p-4 rounded-xl border border-slate-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center group">
-<i class="fas fa-file-pdf text-red-500 text-xl mr-4"></i>
-<div>
-<p class="text-sm font-bold text-slate-700">Goldman_Sachs_ISDA_2026.pdf</p>
-<p class="text-xs text-slate-400 uppercase font-bold tracking-tighter">14 Pages • High Risk Variant</p>
-</div>
-<i class="fas fa-chevron-right ml-auto text-slate-200 group-hover:text-blue-500"></i>
-</button>
-<button onclick="useSample('JP_Morgan_Global_CSA.pdf')" class="w-full text-left p-4 rounded-xl border border-slate-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center group">
-<i class="fas fa-file-contract text-blue-500 text-xl mr-4"></i>
-<div>
-<p class="text-sm font-bold text-slate-700">JP_Morgan_Global_CSA.pdf</p>
-<p class="text-xs text-slate-400 uppercase font-bold tracking-tighter">8 Pages • Compliant Variant</p>
-</div>
-<i class="fas fa-chevron-right ml-auto text-slate-200 group-hover:text-blue-500"></i>
-</button>
-</div>
-</div>
-</div>
+    <div id="sampleModal" class="hidden fixed inset-0 z-50 modal-bg flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800">Select Sample Document</h3>
+                <button onclick="toggleModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4 space-y-3">
+                <button onclick="useSample('Goldman_Sachs_ISDA_2026.pdf')" class="w-full text-left p-4 rounded-xl border border-slate-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center group">
+                    <i class="fas fa-file-pdf text-red-500 text-xl mr-4"></i>
+                    <div>
+                        <p class="text-sm font-bold text-slate-700">Goldman_Sachs_ISDA_2026.pdf</p>
+                        <p class="text-xs text-slate-400 uppercase font-bold tracking-tighter">14 Pages • High Risk Variant</p>
+                    </div>
+                    <i class="fas fa-chevron-right ml-auto text-slate-200 group-hover:text-blue-500"></i>
+                </button>
+                <button onclick="useSample('JP_Morgan_Global_CSA.pdf')" class="w-full text-left p-4 rounded-xl border border-slate-100 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center group">
+                    <i class="fas fa-file-contract text-blue-500 text-xl mr-4"></i>
+                    <div>
+                        <p class="text-sm font-bold text-slate-700">JP_Morgan_Global_CSA.pdf</p>
+                        <p class="text-xs text-slate-400 uppercase font-bold tracking-tighter">8 Pages • Compliant Variant</p>
+                    </div>
+                    <i class="fas fa-chevron-right ml-auto text-slate-200 group-hover:text-blue-500"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
-<nav class="bg-slate-900 text-white p-4 shadow-lg">
-<div class="container mx-auto flex justify-between items-center">
-<div class="flex items-center space-x-2">
-<i class="fas fa-file-contract text-blue-400 text-2xl"></i>
-<span class="text-xl font-bold tracking-tight">OTC<span class="text-blue-400">Review</span></span>
-</div>
-<div class="text-sm font-medium text-slate-400">
-Logged in as: <span class="text-white">Raguram Narayanaswamy</span>
-</div>
-</div>
-</nav>
+    <nav class="bg-slate-900 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-file-contract text-blue-400 text-2xl"></i>
+                <span class="text-xl font-bold tracking-tight">OTC<span class="text-blue-400">Review</span></span>
+            </div>
+            <div class="text-sm font-medium text-slate-400">
+                Logged in as: <span class="text-white">Raguram Narayanaswamy</span>
+            </div>
+        </div>
+    </nav>
 
-<main class="container mx-auto py-8 px-4">
-<header class="mb-8">
-<h1 class="text-3xl font-bold text-slate-800">OTC Document Validation</h1>
-<p class="text-slate-500">Automated Review Workflow for ISDA, CSA, & GMRA Agreements</p>
-</header>
+    <main class="container mx-auto py-8 px-4">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-slate-800">OTC Document Validation</h1>
+            <p class="text-slate-500">Automated Review Workflow for ISDA, CSA, & GMRA Agreements</p>
+        </header>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-<div class="lg:col-span-1 space-y-6">
-<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-<h2 class="text-lg font-semibold mb-4 flex items-center">
-<span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-2">1</span>
-Upload Document
-</h2>
-<div id="dropzone" class="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer bg-slate-50">
-<i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
-<p class="text-sm text-slate-600">Drag & drop OTC agreement or <span class="text-blue-600 font-medium">Browse</span></p>
-<p class="text-xs text-slate-400 mt-2">Supports PDF, DOCX (Max 10MB)</p>
-<input type="file" id="fileInput" class="hidden">
-</div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-2">1</span>
+                        Upload Document
+                    </h2>
+                    <div id="dropzone" class="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors cursor-pointer bg-slate-50">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 mb-3"></i>
+                        <p class="text-sm text-slate-600">Drag & drop OTC agreement or <span class="text-blue-600 font-medium">Browse</span></p>
+                        <p class="text-xs text-slate-400 mt-2">Supports PDF, DOCX (Max 10MB)</p>
+                        <input type="file" id="fileInput" class="hidden">
+                    </div>
+                    
+                    <button id="sampleBtn" onclick="toggleModal()" class="w-full mt-4 bg-white border border-slate-200 text-slate-600 py-2 rounded-lg text-sm font-bold hover:bg-slate-50 transition shadow-sm flex items-center justify-center">
+                        <i class="fas fa-layer-group mr-2 text-blue-500"></i> Try Sample PDF
+                    </button>
 
-<button id="sampleBtn" onclick="toggleModal()" class="w-full mt-4 bg-white border border-slate-200 text-slate-600 py-2 rounded-lg text-sm font-bold hover:bg-slate-50 transition shadow-sm flex items-center justify-center">
-<i class="fas fa-layer-group mr-2 text-blue-500"></i> Try Sample PDF
-</button>
+                    <div id="fileInfo" class="hidden mt-4 p-3 bg-blue-50 rounded border border-blue-100 flex items-center justify-between">
+                        <span id="fileName" class="text-sm font-medium text-blue-800 truncate pr-2"></span>
+                        <i class="fas fa-check-circle text-blue-500"></i>
+                    </div>
+                </div>
 
-<div id="fileInfo" class="hidden mt-4 p-3 bg-blue-50 rounded border border-blue-100 flex items-center justify-between">
-<span id="fileName" class="text-sm font-medium text-blue-800 truncate pr-2"></span>
-<i class="fas fa-check-circle text-blue-500"></i>
-</div>
-</div>
+                <div id="actionCard" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 step-inactive">
+                    <h2 class="text-lg font-semibold mb-4 flex items-center">
+                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-2">2</span>
+                        Analysis Engine
+                    </h2>
+                    <button id="runAnalysis" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition shadow-md flex items-center justify-center">
+                        <i class=""></i> Run
+                    </button>
+                    <div id="progressBarContainer" class="hidden mt-4">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span id="statusText" class="text-blue-600 font-medium">Scanning clauses...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2">
+                            <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<div id="actionCard" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 step-inactive">
-<h2 class="text-lg font-semibold mb-4 flex items-center">
-<span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-2">2</span>
-Analysis Engine
-</h2>
-<button id="runAnalysis" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition shadow-md flex items-center justify-center">
-<i class="fas fa-robot mr-2"></i> Run Automated Check
-</button>
-<div id="progressBarContainer" class="hidden mt-4">
-<div class="flex justify-between text-xs mb-1">
-<span id="statusText" class="text-blue-600 font-medium">Scanning...</span>
-<span id="progressPercent">0%</span>
-</div>
-<div class="w-full bg-slate-200 rounded-full h-2">
-<div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-</div>
-</div>
-</div>
-</div>
+            <div class="lg:col-span-2">
+                <div id="resultsCard" class="bg-white rounded-xl shadow-sm border border-slate-200 min-h-[500px] flex flex-col step-inactive">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h2 class="text-lg font-semibold text-slate-800">Review Output & Flags</h2>
+                        <span id="riskBadge" class="hidden px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"></span>
+                    </div>
+                    
+                    <div id="placeholderUI" class="flex-grow flex flex-col items-center justify-center text-slate-400 p-12 text-center">
+                        <i class="fas fa-microscope text-6xl mb-4 opacity-20"></i>
+                        <p>Complete steps 1 & 2 to generate analysis</p>
+                    </div>
 
-<div class="lg:col-span-2">
-<div id="resultsCard" class="bg-white rounded-xl shadow-sm border border-slate-200 min-h-[500px] flex flex-col step-inactive">
-<div class="p-6 border-b border-slate-100 flex justify-between items-center">
-<h2 class="text-lg font-semibold text-slate-800">Review Output & Flags</h2>
-<div class="flex items-center space-x-2">
-<span id="riskBadge" class="hidden px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"></span>
-</div>
-</div>
+                    <div id="resultsUI" class="hidden p-0">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase font-bold tracking-wider">
+                                    <th class="px-6 py-4">Clause / Provision</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4">Confidence</th>
+                                    <th class="px-6 py-4 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-sm">
+                                <tr>
+                                    <td class="px-6 py-4 font-medium">Termination Provisions (Events of Default)</td>
+                                    <td class="px-6 py-4"><span class="text-green-600 bg-green-50 px-2 py-1 rounded text-xs">MATCHED</span></td>
+                                    <td class="px-6 py-4 text-slate-500">98%</td>
+                                    <td class="px-6 py-4 text-right text-blue-600 cursor-pointer hover:underline">View</td>
+                                </tr>
+                                <tr class="bg-amber-50">
+                                    <td class="px-6 py-4 font-medium">Collateral Maintenance (Thresholds)</td>
+                                    <td class="px-6 py-4"><span class="text-amber-600 bg-amber-100 px-2 py-1 rounded text-xs font-bold">DEVIATION FLAG</span></td>
+                                    <td class="px-6 py-4 text-slate-500">84%</td>
+                                    <td class="px-6 py-4 text-right text-blue-600 cursor-pointer hover:underline">Validate</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 font-medium">Netting Agreement (Close-out)</td>
+                                    <td class="px-6 py-4"><span class="text-green-600 bg-green-50 px-2 py-1 rounded text-xs">MATCHED</span></td>
+                                    <td class="px-6 py-4 text-slate-500">95%</td>
+                                    <td class="px-6 py-4 text-right text-blue-600 cursor-pointer hover:underline">View</td>
+                                </tr>
+                                <tr class="bg-red-50">
+                                    <td class="px-6 py-4 font-medium">Governing Law (Jurisdiction)</td>
+                                    <td class="px-6 py-4"><span class="text-red-600 bg-red-100 px-2 py-1 rounded text-xs font-bold">MISSING</span></td>
+                                    <td class="px-6 py-4 text-slate-500">0%</td>
+                                    <td class="px-6 py-4 text-right text-blue-600 cursor-pointer hover:underline">Escalate</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-between">
+                            <button onclick="location.reload()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">Discard & Reset</button>
+                            <div class="space-x-3">
+                                <button class="bg-slate-200 hover:bg-slate-300 px-4 py-2 rounded-lg text-sm font-bold">Mark up</button>
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-md">Approve</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-<div id="placeholderUI" class="flex-grow flex flex-col items-center justify-center text-slate-400 p-12 text-center">
-<i class="fas fa-microscope text-6xl mb-4 opacity-20"></i>
-<p>Complete steps 1 & 2 to generate analysis</p>
-</div>
+    <script>
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const actionCard = document.getElementById('actionCard');
+        const fileInfo = document.getElementById('fileInfo');
+        const runBtn = document.getElementById('runAnalysis');
+        const resultsCard = document.getElementById('resultsCard');
+        const sampleModal = document.getElementById('sampleModal');
+        const sampleBtn = document.getElementById('sampleBtn');
 
-<div id="resultsUI" class="hidden p-0">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-slate-50 text-slate-500 text-xs uppercase font-bold tracking-wider">
-<th class="px-6 py-4">Clause / Provision</th>
-<th class="px-6 py-4">Status</th>
-<th class="px-6 py-4">Confidence</th>
-<th class="px-6 py-4 text-right">Action</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-slate-100 text-sm">
-<tr>
-<td class="px-6 py-4 font-medium">Termination Provisions (Events of Default)</td>
-<td class="px-6 py-4"><span class="text-green-600 bg-green-50 px-2 py-1 rounded text-xs">MATCHED</span></td>
-<td class="px-6 py-4 text-slate-500">98%</td>
-<td class="px-6 py-4 text-right text-blue-600 cursor-pointer hover:underline">View</td>
-</tr>
-<tr class="bg-amber-50">
-<td class="px-6 py-4 font-medium">Collateral Maintenance (Thresholds)</td>
-<td class="px-6 py-4"><span class="text-amber-600 bg-amber-100 px-2 py-1 rounded text-xs font-bold">DEVIATION FLAG</span></td>
-<td class="px-6 py-4 text-slate-500">84%</td>
-<td class="px-6 py-4 text-right text-blue-600 cursor-pointer hover:underline">Validate</td>
-</tr>
-<tr>
-<td class="px-6 py-4 font-medium">Netting Agreement (Close-out)</td>
-<td class="px-6 py-4"><span class="text-green-600 bg-green-50 px-2 py-1 rounded text-xs">MATCHED</span></td>
-<td class="px-6 py-4 text-slate-500">95%</td>
-<td class="px-6 py-4 text-right text-blue-600 cursor-pointer hover:underline">View</td>
-</tr>
-<tr class="bg-red-50">
-<td class="px-6 py-4 font-medium">Governing Law (Jurisdiction)</td>
-<td class="px-6 py-4"><span class="text-red-600 bg-red-100 px-2 py-1 rounded text-xs font-bold">MISSING</span></td>
-<td class="px-6 py-4 text-slate-500">0%</td>
-<td class="px-6 py-4 text-right text-blue-600 cursor-pointer hover:underline">Escalate</td>
-</tr>
-</tbody>
-</table>
-<div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-between">
-<button onclick="resetDashboard()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">Discard & Reset</button>
-<div class="space-x-3">
-<button class="bg-slate-200 hover:bg-slate-300 px-4 py-2 rounded-lg text-sm font-bold">Mark up / Counter-propose</button>
-<button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-md">Approve</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</main>
+        function toggleModal() { sampleModal.classList.toggle('hidden'); }
 
-<script>
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('fileInput');
-const actionCard = document.getElementById('actionCard');
-const fileInfo = document.getElementById('fileInfo');
-const runBtn = document.getElementById('runAnalysis');
-const resultsCard = document.getElementById('resultsCard');
-const sampleModal = document.getElementById('sampleModal');
-const sampleBtn = document.getElementById('sampleBtn');
+        function useSample(name) {
+            toggleModal();
+            document.getElementById('fileName').innerText = name;
+            fileInfo.classList.remove('hidden');
+            dropzone.classList.add('hidden');
+            sampleBtn.classList.add('hidden'); // Hide sample button once file is loaded
+            actionCard.classList.remove('step-inactive');
+        }
 
-// Modal Controls
-function toggleModal() { sampleModal.classList.toggle('hidden'); }
+        dropzone.onclick = () => fileInput.click();
+        fileInput.onchange = (e) => {
+            if (e.target.files.length > 0) {
+                useSample(e.target.files[0].name);
+            }
+        };
 
-function useSample(name) {
-toggleModal();
-document.getElementById('fileName').innerText = name;
-fileInfo.classList.remove('hidden');
-dropzone.classList.add('hidden');
-sampleBtn.classList.add('hidden');
-actionCard.classList.remove('step-inactive');
-}
+        runBtn.onclick = () => {
+            runBtn.disabled = true;
+            runBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('progressBarContainer').classList.remove('hidden');
+            
+            let progress = 0;
+            const statusTexts = ["Extracting Text...", "Scanning Clauses...", "Template Matching...", "Risk Auditing...", "Finalizing..."];
+            
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 12) + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    showResults();
+                }
+                document.getElementById('progressBar').style.width = progress + '%';
+                document.getElementById('progressPercent').innerText = progress + '%';
+                document.getElementById('statusText').innerText = statusTexts[Math.floor(progress/21)] || "Complete";
+            }, 250);
+        };
 
-function resetDashboard() {
-// Reset Step 1
-document.getElementById('fileName').innerText = "";
-fileInput.value = "";
-fileInfo.classList.add('hidden');
-dropzone.classList.remove('hidden');
-sampleBtn.classList.remove('hidden');
-
-// Reset Step 2
-actionCard.classList.add('step-inactive');
-document.getElementById('progressBarContainer').classList.add('hidden');
-document.getElementById('progressBar').style.width = '0%';
-runBtn.disabled = false;
-runBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-runBtn.innerHTML = `<i class="fas fa-robot mr-2"></i> Run Automated Check`;
-
-// Reset Results
-resultsCard.classList.add('step-inactive');
-document.getElementById('placeholderUI').classList.remove('hidden');
-document.getElementById('resultsUI').classList.add('hidden');
-document.getElementById('riskBadge').classList.add('hidden');
-
-window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Upload Logic
-dropzone.onclick = () => fileInput.click();
-fileInput.onchange = (e) => {
-if (e.target.files.length > 0) {
-useSample(e.target.files[0].name);
-}
-};
-
-// Engine Logic
-runBtn.onclick = () => {
-runBtn.disabled = true;
-runBtn.classList.add('opacity-50', 'cursor-not-allowed');
-runBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Processing...`;
-document.getElementById('progressBarContainer').classList.remove('hidden');
-
-let progress = 0;
-const statusTexts = ["Extracting...", "Scanning...", "Matching...", "Auditing...", "Finalizing..."];
-
-const interval = setInterval(() => {
-progress += Math.floor(Math.random() * 12) + 5;
-if (progress >= 100) {
-progress = 100;
-clearInterval(interval);
-showResults();
-}
-document.getElementById('progressBar').style.width = progress + '%';
-document.getElementById('progressPercent').innerText = progress + '%';
-document.getElementById('statusText').innerText = statusTexts[Math.floor(progress/21)] || "Complete";
-}, 250);
-};
-
-function showResults() {
-document.getElementById('placeholderUI').classList.add('hidden');
-document.getElementById('resultsUI').classList.remove('hidden');
-resultsCard.classList.remove('step-inactive');
-
-const risk = document.getElementById('riskBadge');
-risk.classList.remove('hidden');
-risk.innerText = "Compliance Flags Detected";
-risk.classList.add('bg-amber-100', 'text-amber-800');
-
-resultsCard.scrollIntoView({ behavior: 'smooth' });
-}
-</script>
+        function showResults() {
+            document.getElementById('placeholderUI').classList.add('hidden');
+            document.getElementById('resultsUI').classList.remove('hidden');
+            resultsCard.classList.remove('step-inactive');
+            
+            const risk = document.getElementById('riskBadge');
+            risk.classList.remove('hidden');
+            risk.innerText = "Compliance Flags Detected";
+            risk.classList.add('bg-amber-100', 'text-amber-800');
+            
+            resultsCard.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
