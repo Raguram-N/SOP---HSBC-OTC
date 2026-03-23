@@ -47,7 +47,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <i class="fas fa-file-contract text-blue-400 text-2xl"></i>
-                <span class="text-xl font-bold tracking-tight">OTC<span class="text-blue-400">Review</span></span>
+                <span class="text-xl font-bold tracking-tight">OTC<span class="text-blue-400"> Review</span></span>
             </div>
             <div class="text-sm font-medium text-slate-400">
                 Logged in as: <span class="text-white">Raguram Narayanaswamy</span>
@@ -85,17 +85,18 @@
                     </div>
                 </div>
 
-                <div id="actionCard" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 step-inactive">
-                    <h2 class="text-lg font-semibold mb-4 flex items-center">
-                        <span class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center mr-2">2</span>
-                        Analysis Engine
-                    </h2>
-                    <button id="runAnalysis" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition shadow-md flex items-center justify-center">
-                        <i class=""></i> Run
+                <div id="actionCard" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 step-inactive flex flex-col justify-center items-center min-h-[120px]">
+                    <button id="runAnalysis" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition shadow-md flex items-center justify-center text-lg uppercase tracking-wider">
+                        Run
                     </button>
-                    <div id="progressBarContainer" class="hidden mt-4">
+
+                    <button id="downloadBtn" onclick="alert('Generating PDF Report...')" class="hidden w-full mt-3 bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold py-3 rounded-lg transition shadow-sm flex items-center justify-center hover:bg-emerald-100">
+                        <i class="fas fa-file-download mr-2"></i> Download Audit Report
+                    </button>
+
+                    <div id="progressBarContainer" class="hidden w-full mt-4">
                         <div class="flex justify-between text-xs mb-1">
-                            <span id="statusText" class="text-blue-600 font-medium">Scanning clauses...</span>
+                            <span id="statusText" class="text-blue-600 font-medium">Scanning...</span>
                             <span id="progressPercent">0%</span>
                         </div>
                         <div class="w-full bg-slate-200 rounded-full h-2">
@@ -155,10 +156,10 @@
                             </tbody>
                         </table>
                         <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-between">
-                            <button onclick="location.reload()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">Discard & Reset</button>
+                            <button onclick="resetDashboard()" class="text-slate-500 hover:text-slate-700 text-sm font-medium">Discard & Reset</button>
                             <div class="space-x-3">
-                                <button class="bg-slate-200 hover:bg-slate-300 px-4 py-2 rounded-lg text-sm font-bold">Mark up</button>
-                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-md">Approve</button>
+                                <button class="bg-slate-200 hover:bg-slate-300 px-4 py-2 rounded-lg text-sm font-bold text-slate-700">Mark up</button>
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-md">Approve Agreement</button>
                             </div>
                         </div>
                     </div>
@@ -173,6 +174,7 @@
         const actionCard = document.getElementById('actionCard');
         const fileInfo = document.getElementById('fileInfo');
         const runBtn = document.getElementById('runAnalysis');
+        const downloadBtn = document.getElementById('downloadBtn');
         const resultsCard = document.getElementById('resultsCard');
         const sampleModal = document.getElementById('sampleModal');
         const sampleBtn = document.getElementById('sampleBtn');
@@ -180,15 +182,47 @@
         function toggleModal() { sampleModal.classList.toggle('hidden'); }
 
         function useSample(name) {
-            toggleModal();
+            sampleModal.classList.add('hidden'); 
             document.getElementById('fileName').innerText = name;
             fileInfo.classList.remove('hidden');
             dropzone.classList.add('hidden');
-            sampleBtn.classList.add('hidden'); // Hide sample button once file is loaded
+            sampleBtn.classList.add('hidden'); 
             actionCard.classList.remove('step-inactive');
         }
 
-        dropzone.onclick = () => fileInput.click();
+        function resetDashboard() {
+            document.getElementById('fileName').innerText = "";
+            fileInput.value = "";
+            fileInfo.classList.add('hidden');
+            dropzone.classList.remove('hidden');
+            sampleBtn.classList.remove('hidden');
+            
+            actionCard.classList.add('step-inactive');
+            downloadBtn.classList.add('hidden');
+            document.getElementById('progressBarContainer').classList.add('hidden');
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('statusText').innerText = "Scanning...";
+            document.getElementById('statusText').classList.add('text-blue-600');
+            document.getElementById('statusText').classList.remove('text-green-600');
+            
+            runBtn.disabled = false;
+            runBtn.classList.remove('hidden'); 
+            runBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            runBtn.innerHTML = "Run";
+
+            resultsCard.classList.add('step-inactive');
+            document.getElementById('placeholderUI').classList.remove('hidden');
+            document.getElementById('resultsUI').classList.add('hidden');
+            document.getElementById('riskBadge').classList.add('hidden');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        dropzone.onclick = (e) => {
+            e.stopPropagation();
+            fileInput.click();
+        }
+
         fileInput.onchange = (e) => {
             if (e.target.files.length > 0) {
                 useSample(e.target.files[0].name);
@@ -198,21 +232,31 @@
         runBtn.onclick = () => {
             runBtn.disabled = true;
             runBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            runBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Analysing...`;
             document.getElementById('progressBarContainer').classList.remove('hidden');
             
             let progress = 0;
-            const statusTexts = ["Extracting Text...", "Scanning Clauses...", "Template Matching...", "Risk Auditing...", "Finalizing..."];
+            const statusTexts = ["Extracting...", "Scanning...", "Matching...", "Auditing...", "Finalizing..."];
             
             const interval = setInterval(() => {
                 progress += Math.floor(Math.random() * 12) + 5;
+                
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(interval);
+                    
+                    runBtn.classList.add('hidden'); 
+                    downloadBtn.classList.remove('hidden'); 
+                    
+                    document.getElementById('statusText').innerText = "Analysis Complete";
+                    document.getElementById('statusText').classList.replace('text-blue-600', 'text-green-600');
                     showResults();
+                } else {
+                    document.getElementById('statusText').innerText = statusTexts[Math.floor(progress/21)];
                 }
+
                 document.getElementById('progressBar').style.width = progress + '%';
                 document.getElementById('progressPercent').innerText = progress + '%';
-                document.getElementById('statusText').innerText = statusTexts[Math.floor(progress/21)] || "Complete";
             }, 250);
         };
 
