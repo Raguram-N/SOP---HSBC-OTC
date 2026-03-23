@@ -4,7 +4,7 @@
 This SOP defines the standardized process for reviewing Over-The-Counter (OTC) documents using an automated tool, ensuring accuracy, compliance, and consistency across contract validation workflows.
 
 - Prototype [link](https://raguram-n.github.io/SOP---HSBC-OTC/)
-- Flowchar [Link](https://github.com/Raguram-N/OTC-flow-chart/blob/main/README.md)
+- Flowchart [Link](https://github.com/Raguram-N/OTC-flow-chart/blob/main/README.md)
 
 ---
 
