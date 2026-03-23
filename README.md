@@ -1,4 +1,4 @@
-# 📄 OTC Document Review Tool – Sample SOP & prototype
+# 📄 OTC Document Review Tool – SOP & prototype
 
 ## 🧭 Purpose
 This SOP defines the standardized process for reviewing Over-The-Counter (OTC) documents using an automated tool, ensuring accuracy, compliance, and consistency across contract validation workflows.
