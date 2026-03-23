@@ -1,7 +1,10 @@
-# 📄 OTC Document Review Tool – SOP & UAT Guide
+# 📄 OTC Document Review Tool – Sample SOP & prototype
 
 ## 🧭 Purpose
 This SOP defines the standardized process for reviewing Over-The-Counter (OTC) documents using an automated tool, ensuring accuracy, compliance, and consistency across contract validation workflows.
+
+- Prototype [link]()
+- Flowchar [Link](https://github.com/Raguram-N/OTC-flow-chart/blob/main/README.md)
 
 ---
 
@@ -35,29 +38,23 @@ This applies to all team members involved in reviewing OTC agreements such as:
 
 ---
 
-## 🔄 Process Flow 
-
-### Flow chart [Link](https://github.com/Raguram-N/OTC-flow-chart/blob/main/README.md)
-
----
-
 ## 🪜 Step-by-Step Procedure
 
-### 🔹 Step 1: Login
+### Step 1: Login
 - Access the OTC Review Tool  
 - Enter credentials  
 - Ensure dashboard loads successfully  
 
 ---
 
-### 🔹 Step 2: Upload Document
+### Step 2: Upload Document
 - Click **Upload Document**  
 - Select OTC agreement file  
 - Confirm successful upload  
 
 ---
 
-### 🔹 Step 3: Run Automated Check
+### Step 3: Run Automated Check
 - Click **Run Analysis**  
 - Tool scans for:
   - Missing clauses  
@@ -66,7 +63,7 @@ This applies to all team members involved in reviewing OTC agreements such as:
 
 ---
 
-### 🔹 Step 4: Review Output
+### Step 4: Review Output
 - Analyze flagged sections:
   - Termination clauses  
   - Collateral terms  
@@ -75,7 +72,7 @@ This applies to all team members involved in reviewing OTC agreements such as:
 
 ---
 
-### 🔹 Step 5: Decision Making
+### Step 5: Decision Making
 - ✅ No issues → Proceed to finalize  
 - ⚠️ Issues found:
   - Perform manual validation  
@@ -83,7 +80,7 @@ This applies to all team members involved in reviewing OTC agreements such as:
 
 ---
 
-### 🔹 Step 6: Escalation (if required)
+### Step 6: Escalation (if required)
 - Escalate to Compliance/Legal Team  
 - Attach:
   - Screenshots  
@@ -92,7 +89,7 @@ This applies to all team members involved in reviewing OTC agreements such as:
 
 ---
 
-### 🔹 Step 7: Finalization
+### Step 7: Finalization
 - Mark document as:
   - Approved ✅  
   - Rejected ❌  
@@ -100,7 +97,7 @@ This applies to all team members involved in reviewing OTC agreements such as:
 
 ---
 
-### 🔹 Step 8: Archive
+### Step 8: Archive
 - Store document in repository  
 - Update tracking system  
 
