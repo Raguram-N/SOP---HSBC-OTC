@@ -152,14 +152,6 @@ This applies to all team members involved in reviewing OTC agreements such as:
 
 ---
 
-## 🔁 Version Control
-
-| Version | Date | Updated By | Changes |
-|--------|------|-----------|--------|
-| 1.0 | DD/MM/YYYY | Your Name | Initial SOP |
-
----
-
 ## ⚠️ Notes
 
 - Follow compliance and regulatory guidelines  
